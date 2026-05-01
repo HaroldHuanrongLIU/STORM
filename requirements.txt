@@ -1,6 +1,10 @@
-torch
-torchaudio
-torchvision
+# Core PyTorch stack. Install a CUDA-specific wheel separately if needed.
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Original STORM / Atari workflow.
+gymnasium[atari,accept-rom-license]
 yacs
 tensorboardX
 tensorboard
@@ -8,5 +12,9 @@ moviepy
 colorama
 einops
 tqdm
+
+# SurgWMBench data layer, image/video IO, and tests.
+numpy
+pillow
 opencv-python
-gymnasium[atari,accept-rom-license]
+pytest

@@ -2,13 +2,65 @@
 
 News: This project is no longer maintained, and we recommend using the new [OC-STORM](https://github.com/weipu-zhang/OC-STORM) repo, which also contains full code for running STORM on Atari games.
 
-This repo contains an implementation of STORM. 
+This repo contains an implementation of STORM plus a local `storm_surgwmbench/` extension for the SurgWMBench surgical instrument motion-planning benchmark.
 
-Following the **Training and Evaluating Instructions** to reproduce the main results presented in our paper. One may also find **Additional Useful Information** useful when debugging and observing intermediate results. To reproduce the speed metrics mentioned in the paper, please see **Reproducing Speed Metrics**.
+The original STORM code remains Atari-oriented. The current SurgWMBench path implements the first data-layer pass: dataset loaders, collators, trajectory metrics, a toy dataset generator, validation tooling, and tests. VAE, Transformer, policy, and training-loop adaptation for SurgWMBench are planned next.
 
-## Training and Evaluating Instructions
+## SurgWMBench Data Layer
 
-1. Install the necessary dependencies. Note that we conducted our experiments using `python 3.10`.
+The local dataset is expected at:
+
+```shell
+/mnt/hdd1/neurips2026_dataset_track/SurgWMBench
+```
+
+The dataset README at that path is treated as the canonical contract. The loader uses official manifests only and does not create random train/val/test splits.
+
+Install dependencies:
+
+```shell
+pip install -r requirements.txt
+```
+
+Validate a small real-data sample:
+
+```shell
+python -m tools.validate_surgwmbench_loader \
+  --dataset-root /mnt/hdd1/neurips2026_dataset_track/SurgWMBench \
+  --manifest manifests/train.jsonl \
+  --interpolation-method linear \
+  --check-files \
+  --num-samples 8
+```
+
+Run SurgWMBench data-layer tests:
+
+```shell
+python -m pytest -q tests
+```
+
+Create and validate a toy fixture:
+
+```shell
+python -m tools.make_toy_surgwmbench --output /tmp/SurgWMBenchToy --num-clips 2
+python -m tools.validate_surgwmbench_loader \
+  --dataset-root /tmp/SurgWMBenchToy \
+  --manifest manifests/train.jsonl \
+  --check-files
+```
+
+Important semantics:
+
+- Sparse 20-anchor human labels are the primary target.
+- Dense interpolation coordinates are auxiliary pseudo labels.
+- Frame filenames and extensions are read from annotations; do not infer `.jpg` or `.png`.
+- Coordinates are exposed in normalized and pixel formats; metrics should keep human and pseudo targets separate.
+
+## Original Atari Training and Evaluating Instructions
+
+Follow these instructions to reproduce the original Atari STORM workflow.
+
+1. Install the necessary dependencies. Note that the original experiments used `python 3.10`.
     ```shell
     pip install -r requirements.txt
     ```
