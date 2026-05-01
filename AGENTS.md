@@ -62,7 +62,7 @@ python -m pytest -q tests/test_surgwmbench_dataset.py tests/test_collate.py test
 
 ## Commit & Pull Request Guidelines
 
-Recent history uses short imperative subjects, for example `Add SurgWMBench data layer` and `Update readme.md`. Keep commits focused and avoid mixing generated cache files with source changes.
+Recent history uses short imperative subjects, for example `Add SurgWMBench data layer` and `Update README.md`. Keep commits focused and avoid mixing generated cache files with source changes.
 
 Pull requests should include a concise summary, test commands run, dataset assumptions, and any limitations. For visual or rollout changes, include saved examples or screenshots when relevant.
 
